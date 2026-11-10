@@ -1,0 +1,390 @@
+{
+  "research": {
+    "title": "Trust-Aware Fusion of Heterogeneous Security Evidence for IoT Intrusion Detection under Simulated Evidence Manipulation",
+    "version": "0.2.0-ciciot2023",
+    "seed": 42,
+    "dataset_name": "CICIoT2023"
+  },
+  "data": {
+    "dataset_root": "data/CICIoT2023",
+    "download_mode": "auto",
+    "official_source": "https://www.unb.ca/cic/datasets/iotdataset-2023.html",
+    "kaggle_dataset_slug": "madhavmalhotra/unb-cic-iot-dataset",
+    "test_size": 0.2,
+    "validation_size": 0.2,
+    "split_strategy": "stratified_holdout",
+    "group_column_candidates": [
+      "device_id",
+      "Device_ID",
+      "device",
+      "device id",
+      "source",
+      "Source",
+      "src_ip",
+      "Source IP",
+      "src_addr",
+      "source_address",
+      "mac",
+      "MAC",
+      "flow_id",
+      "Flow ID",
+      "session",
+      "host"
+    ],
+    "timestamp_column_candidates": [
+      "ts",
+      "timestamp",
+      "Timestamp",
+      "time",
+      "Time",
+      "Date",
+      "datetime",
+      "DateTime"
+    ],
+    "label_column_candidates": [
+      "label",
+      "Label",
+      "class",
+      "Class",
+      "attack",
+      "Attack",
+      "target",
+      "Target",
+      "category",
+      "Category"
+    ],
+    "max_debug_samples": 50000,
+    "deduplicate_exact": true,
+    "near_duplicate_check": true,
+    "near_duplicate_sample_limit": 10000,
+    "candidate_inspection_rows": 20000,
+    "expected_min_feature_count": 10,
+    "expected_min_samples": 1000
+  },
+  "preprocessing": {
+    "missing_value_strategy": "median_for_numeric_mode_for_categorical",
+    "infinite_value_policy": "replace_with_nan",
+    "categorical_encoding": "one_hot",
+    "scale_numeric": true,
+    "scaler": "standard",
+    "feature_selection": "none_initially",
+    "smote": {
+      "enabled": false,
+      "k_neighbors": 5,
+      "random_state": 42
+    },
+    "fit_preprocessors_on_train_only": true
+  },
+  "models": {
+    "random_forest": {
+      "enabled": true,
+      "n_estimators": 300,
+      "max_depth": null,
+      "min_samples_leaf": 1,
+      "class_weight": "balanced_subsample",
+      "random_state": 42,
+      "n_jobs": -1
+    },
+    "xgboost": {
+      "enabled": true,
+      "n_estimators": 300,
+      "max_depth": 8,
+      "learning_rate": 0.05,
+      "subsample": 0.9,
+      "colsample_bytree": 0.9,
+      "reg_lambda": 1.0,
+      "random_state": 42,
+      "n_jobs": -1,
+      "eval_metric": "auto"
+    },
+    "tabular_dnn": {
+      "enabled": true,
+      "hidden_dims": [
+        128,
+        64,
+        32
+      ],
+      "dropout": 0.2,
+      "learning_rate": 0.001,
+      "weight_decay": 0.0001,
+      "batch_size": 256,
+      "epochs": 30,
+      "early_stopping_patience": 5
+    }
+  },
+  "evidence": {
+    "schema_version": "1.0",
+    "trust_range": [
+      0.0,
+      1.0
+    ],
+    "confidence_range": [
+      0.0,
+      1.0
+    ],
+    "required_fields": [
+      "evidence_id",
+      "source",
+      "device_id",
+      "timestamp",
+      "attack_type",
+      "confidence",
+      "anomaly_score",
+      "severity"
+    ],
+    "optional_fields": [
+      "features",
+      "reason",
+      "predicted_attack",
+      "attack_probability",
+      "metadata"
+    ]
+  },
+  "trust_engine": {
+    "versions": [
+      "fixed_weight",
+      "adaptive_reliability",
+      "adversarial_robust"
+    ],
+    "initial_source_reliability": 0.5,
+    "minimum_reliability": 0.05,
+    "maximum_reliability": 0.99,
+    "update_rate": 0.1,
+    "recent_window": 50,
+    "agreement_tolerance": 0.15,
+    "temporal_window": 10,
+    "contradiction_penalty": 0.2,
+    "confidence_calibration_weight": 0.2,
+    "historical_reliability_weight": 0.3,
+    "agreement_weight": 0.2,
+    "temporal_consistency_weight": 0.15,
+    "behavioral_consistency_weight": 0.15
+  },
+  "agents": {
+    "enabled": [
+      "DetectionAgent",
+      "BehavioralAgent",
+      "ThreatIntelligenceAgent",
+      "ReasoningAgent",
+      "ResponseAgent",
+      "VerificationAgent",
+      "RecoveryAgent"
+    ],
+    "source_names": [
+      "DetectionAgent",
+      "BehavioralAgent",
+      "ThreatIntelligenceAgent"
+    ]
+  },
+  "adversarial": {
+    "enabled": true,
+    "seed": 42,
+    "scenarios": {
+      "evidence_noise": {
+        "enabled": true,
+        "severity_levels": [
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ]
+      },
+      "evidence_suppression": {
+        "enabled": true,
+        "suppression_rates": [
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ]
+      },
+      "confidence_manipulation": {
+        "enabled": true,
+        "delta_levels": [
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ]
+      },
+      "contradictory_evidence": {
+        "enabled": true,
+        "conflict_rates": [
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ]
+      },
+      "gradual_evasion": {
+        "enabled": true,
+        "intensity_levels": [
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ]
+      },
+      "cross_agent_manipulation": {
+        "enabled": true,
+        "target_agents": [
+          "DetectionAgent",
+          "BehavioralAgent"
+        ],
+        "manipulation_levels": [
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5
+        ]
+      },
+      "reasoning_context_manipulation": {
+        "enabled": true,
+        "rates": [
+          0.1,
+          0.2,
+          0.3
+        ]
+      }
+    }
+  },
+  "simulation": {
+    "states": [
+      "NORMAL",
+      "SUSPICIOUS",
+      "COMPROMISED",
+      "ISOLATED",
+      "RECOVERING",
+      "RESTORED"
+    ],
+    "actions": [
+      "MONITOR",
+      "RATE_LIMIT",
+      "BLOCK_FLOW",
+      "REAUTHENTICATE",
+      "ISOLATE",
+      "QUARANTINE",
+      "RESTORE"
+    ],
+    "episode_count": 100,
+    "max_steps_per_episode": 100,
+    "verification_delay_steps": 1,
+    "recovery_clean_observations_required": 5,
+    "device_criticality_levels": [
+      "LOW",
+      "MEDIUM",
+      "HIGH"
+    ],
+    "initial_state": "NORMAL"
+  },
+  "policy": {
+    "allowed_actions": [
+      "MONITOR",
+      "RATE_LIMIT",
+      "BLOCK_FLOW",
+      "REAUTHENTICATE",
+      "ISOLATE",
+      "QUARANTINE",
+      "RESTORE"
+    ],
+    "minimum_trust_for_high_impact": 0.7,
+    "minimum_confidence_for_high_impact": 0.75,
+    "high_impact_actions": [
+      "ISOLATE",
+      "QUARANTINE",
+      "RESTORE"
+    ],
+    "critical_device_requires_extra_verification": true
+  },
+  "llm": {
+    "mode": "auto",
+    "local_model_name": "Qwen/Qwen2.5-3B-Instruct",
+    "load_in_4bit": true,
+    "max_new_tokens": 256,
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "timeout_seconds": 60,
+    "max_context_evidence_items": 20,
+    "require_json": true,
+    "fallback_mode": "deterministic"
+  },
+  "evaluation": {
+    "metrics": [
+      "accuracy",
+      "precision",
+      "recall",
+      "f1",
+      "roc_auc",
+      "pr_auc",
+      "fpr",
+      "fnr"
+    ],
+    "defense_metrics": [
+      "attack_detection_latency",
+      "response_latency",
+      "mitigation_success_rate",
+      "attack_containment_rate",
+      "recovery_time",
+      "false_intervention_rate",
+      "unnecessary_isolation_rate",
+      "autonomous_decision_accuracy",
+      "evidence_trust_calibration",
+      "agent_agreement",
+      "residual_risk"
+    ],
+    "llm_metrics": [
+      "structured_output_validity",
+      "reasoning_consistency",
+      "invalid_action_rejection_rate",
+      "latency",
+      "token_usage"
+    ],
+    "robustness_metrics": [
+      "clean_performance",
+      "adversarial_performance",
+      "performance_degradation",
+      "false_intervention_increase",
+      "missed_attack_increase",
+      "response_degradation"
+    ]
+  },
+  "statistics": {
+    "seeds": [
+      42,
+      52,
+      62,
+      72,
+      82
+    ],
+    "alpha": 0.05,
+    "test": "wilcoxon",
+    "paired": true,
+    "effect_size": "rank_biserial",
+    "multiple_comparison_correction": "holm"
+  },
+  "explainability": {
+    "shap_enabled": true,
+    "permutation_importance_enabled": true,
+    "max_shap_samples": 2000,
+    "decision_trace_enabled": true
+  },
+  "resources": {
+    "output_root": "results",
+    "model_dir": "results/models",
+    "prediction_dir": "results/predictions",
+    "figure_dir": "results/figures",
+    "table_dir": "results/tables",
+    "event_log_dir": "results/event_logs",
+    "decision_dir": "results/agent_decisions",
+    "trust_history_dir": "results/trust_history",
+    "adversarial_dir": "results/adversarial",
+    "ablation_dir": "results/ablation",
+    "log_dir": "results/logs"
+  }
+}

@@ -1,0 +1,1 @@
+No software license has been selected in this prepared repository snapshot. Before public release, the authors should confirm ownership/redistribution rights and add an appropriate license. Public visibility alone does not grant permission to reuse the code.
