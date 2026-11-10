@@ -1,1 +1,9 @@
-No software license has been selected in this prepared repository snapshot. Before public release, the authors should confirm ownership/redistribution rights and add an appropriate license. Public visibility alone does not grant permission to reuse the code.
+The research code in this repository is released under the MIT License.
+
+The MIT License is provided in the LICENSE file at the repository root.
+
+The authors have authorized the public distribution and reuse of the research code under these terms.
+
+The CICIoT2023 dataset is not included or redistributed and remains subject to its original terms of use.
+
+The manuscript, third-party materials, and dataset are not automatically covered by the software license.
